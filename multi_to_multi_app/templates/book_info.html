@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <style>
+        #main_container {
+            text-align: center;
+        }
+        .description {
+            /* display: inline-block */
+        }
+        ul li {
+            list-style: none;
+        }
+    </style>
+</head>
+<body>
+    <div id='main_container'>
+        <h1>{{book.title}}</h1>
+        <h3>ID: {{book.id}}</h3>
+        <h3 class="description">Description</h3>
+        <p class="description">
+            {{book.description}}
+        </p>
+        <h3>Authors</h3>
+        <ul>
+            {% for author in book_authors %}
+                <li>{{author.f_name}} {{author.l_name}} </li>
+            {% endfor %}    
+        </ul>
+        <form action="/books/{{book.id}}/add_author" method="post">
+            {% csrf_token %}
+            <select name="author" id="add_author">
+                {% for author in selectable_authors %}
+                    <option value="{{author.id}}">{{author.f_name}} {{author.l_name}}</option>
+                {% endfor %}
+            </select>
+            <input type="submit" value="Add">
+        </form>
+        <a href="/">back</a>
+    </div>
+</body>
+</html>

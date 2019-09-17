@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+    <head>
+        <meta charset="utf-8">
+        <title>Register</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <style>
+          #registraition_container {
+            width: 30%;
+            text-align: center;
+            margin: 0 auto;
+            display: inline-block;
+          }
+          #author_container {
+            width: 69%;
+            height: 400px;
+            display: inline-block;
+            text-align: center;
+            vertical-align: top;
+            background-color: #dee1f1;
+          }
+          #author_div {
+            margin-top: 200px;
+          }
+          #author_link {
+            margin-top: 40px;
+          }
+          input {
+            margin: 20px;
+          }
+          textarea {
+            margin: 20px;
+            width: 200px;
+            height: 150px;
+          }
+          table {
+            text-align: center;
+          }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+          <div id="registraition_container">
+            <h1>Register</h1>
+            <form action="/add_author" method="post" id="author_registration">
+              {% csrf_token %}
+                <input type="text" name="first_name" placeholder="Author First Name"><br>
+                <input type="text" name="last_name" placeholder="Author Last Name"><br>
+                <textarea name="author_notes" form="author_registration">Enter description here...</textarea>
+                <input type="submit" class="btn btn-primary" name="" value="Register">
+            </form>
+          </div>
+          <div id="author_container">
+              <div id="author_div">
+                <a id="author_link" href="/">Veiw All Books</a>
+              </div>
+          </div>
+          <div id="table_div">
+            <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th scope="col">Authors First Name</th>
+                    <th scope="col">Authors last Name</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for author in all_authors %}
+                    <tr>
+                        <td>
+                          {{author.f_name}}
+                        </td>
+                        <td>
+                          {{author.l_name}}
+                        </td>
+                        <td>
+                          <a href="/authors/{{author.id}}">view</a>
+                          &emsp;&nbsp;
+                          <a href="/delete_author/{{author.id}}">delete</a>
+                        </td>
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+          </div>
+        </div>
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    </body>
+</html>

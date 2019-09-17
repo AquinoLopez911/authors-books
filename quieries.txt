@@ -1,0 +1,125 @@
+from multi_to_multi_app.models import *
+#
+##Query: Create 5 books with the following names: C Sharp, Java, Python, PHP, Ruby
+#
+>>> Book.objects.create(title="C Sharp", description="this book teaches you the foundations of C Sharp")
+<Book: Book object (1)>
+>>> exit()  ##changed the __repr__
+(djangoPy3Env) Anthonys-MacBook-Pro:relaionship__proj anthonylopez-aquino$ python manage.py shell
+Python 3.7.4 (default, Jul  9 2019, 18:13:23)
+[Clang 10.0.1 (clang-1001.0.46.4)] on darwin
+Type "help", "copyright", "credits" or "license" for more information.
+(InteractiveConsole)
+>>> from multi_to_multi_app.models import *
+>>> Book.objects.create(title="Java", description="this book teaches you the foundations of Java")
+Book object: 2: title is Java, this book teaches you the foundations of Java
+>>> Book.objects.create(title="Python", description="this book teaches you the foundations of Python")
+Book object: 3: title is Python, this book teaches you the foundations of Python
+>>> Book.objects.create(title="PHP", description="this book teaches you the foundations of PHP")
+Book object: 4: title is PHP, this book teaches you the foundations of PHP
+>>> Book.objects.create(title="Ruby", description="this book teaches you the foundations of Ruby")
+Book object: 5: title is Ruby, this book teaches you the foundations of Ruby
+#
+##Query: Create 5 different authors: Jane Austen, Emily Dickinson, Fyodor Dostoevksy, William Shakespeare, Lau Tzu
+#
+#book key doesnt have to be defined beacue its on the third table 
+#
+>>> Author.objects.create(f_name="jane", l_name="Austen")
+Author object: 1: jane Austen
+>>> Author.objects.create(f_name="Emily", l_name="Dickenson")
+Author object: 2: Emily Dickenson
+>>> Author.objects.create(f_name="fiodor", l_name="Dostoevksy")
+Author object: 3: fiodor Dostoevksy
+>>> Author.objects.create(f_name="William", l_name="Shakespear")
+Author object: 4: William Shakespear
+>>> Author.objects.create(f_name="Lau", l_name="Tzu")
+Author object: 5: Lau Tzu
+
+#
+##Add a new text field in the authors table called 'notes'.
+#
+>>> exit()
+(djangoPy3Env) Anthonys-MacBook-Pro:relaionship__proj anthonylopez-aquino$ python manage.py makemigrations
+You are trying to add a non-nullable field 'notes' to author without a default; we can't do that (the database needs something to populate existing rows).
+Please select a fix:
+ 1) Provide a one-off default now (will be set on all existing rows with a null value for this column)
+ 2) Quit, and let me add a default in models.py
+Select an option: 1
+Please enter the default value now, as valid Python
+The datetime and django.utils.timezone modules are available, so you can do e.g. timezone.now
+Type 'exit' to exit this prompt
+>>> "An author to a book or two"
+Migrations for 'multi_to_multi_app':
+  multi_to_multi_app/migrations/0002_author_notes.py
+    - Add field notes to author
+(djangoPy3Env) Anthonys-MacBook-Pro:relaionship__proj anthonylopez-aquino$ python manage.py migrate
+Operations to perform:
+  Apply all migrations: admin, auth, contenttypes, multi_to_multi_app, sessions
+Running migrations:
+  Applying multi_to_multi_app.0002_author_notes... OK
+(djangoPy3Env) Anthonys-MacBook-Pro:relaionship__proj anthonylopez-aquino$
+#
+##Query: Change the name of the C Sharp book to C#
+#
+from multi_to_multi_app.models import *
+>>> Book.objects.get(title="C Sharp")
+Book object: 1: title is C Sharp, this book teaches you the foundations of C Sharp
+>>> to_change =  Book.objects.get(title="C Sharp")
+>>> to_change.title = "C#"
+>>> to_change.save()
+#
+##Query: Change the first name of the 4th author to Bill
+#
+>>> to_change = Author.objects.get(id=4)
+>>> to_change.f_name="Bill"
+>>> to_change.save()
+#
+##Query: Assign the first author to the first 2 books
+#
+>>> first_author = Author.objects.first()
+>>> first_book = Book.objects.first()
+first_book.publishers.add(first_author)
+second_book = Book.objects.get(id=2)
+>>> second_book.publishers.add(first_author)
+>>> first_book.save()
+>>> second_book.save()
+#
+##Query: Assign the second author to the first 3 books
+#
+second_author = Author.objects.get(id=2)
+>>> third_book = Book.objects.get(id=3)
+>>> first_book.publishers.add(second_author)
+>>> second_book.publishers.add(second_author)
+>>> third_book.publishers.add(second_author)
+>>> first_book.save()
+>>> second_book.save()
+>>> third_book.save()
+#
+##Query: Assign the third author to the first 4 books
+#
+third_author = Author.objects.get(id=3)
+>>> fourth_book = Book.objects.get(id=4)
+>>> first_book.publishers.add(third_author)
+>>> second_book.publishers.add(third_author)
+>>> third_book.publishers.add(third_author)
+>>> fourth_book.publishers.add(third_author)
+>>> first_book.save()
+>>> second_book.save()
+>>> third_book.save()
+>>> fourth_book.save()
+#
+##Query: Retrieve all the authors for the 3rd book
+#
+third_book.publishers.all()
+<QuerySet [Author object: 2: Emily Dickenson, Author object: 3: fiodor Dostoevksy, Author object: 4: Bill Shakespear]>
+#
+##remove the first author from the third book
+#
+third_book.publishers.remove(first_author)
+
+
+
+third_author.books.all()
+<QuerySet [Book object: 1: title is C#, this book teaches you the foundations of C Sharp, Book object: 2: title is Java,
+     this book teaches you the foundations of Java, Book object: 3: title is Python, this book teaches you the foundations of Python, 
+     Book object: 4: title is PHP, this book teaches you the foundations of PHP]>
